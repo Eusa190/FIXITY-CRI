@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+flask-mysqldb
+flask-migrate
+flask-mail
+pandas
+numpy
+werkzeug
+flask-cors

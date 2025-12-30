@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authority Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <style>
+        .issue-detail-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; }
+        .issue-modal-content { background-color: #fefefe; padding: 25px; width: 90%; max-width: 600px; border-radius: 12px; position: relative; }
+        .issue-modal-close { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer; }
+        #modal-map { height: 250px; width: 100%; border-radius: 8px; margin-top: 15px; }
+        .issue-item { padding: 1.5rem; border: 1px solid #e0f7fa; border-radius: 12px; margin-bottom: 1rem; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .issue-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .issue-header h3 { margin:0; cursor: pointer; color: #1e2582; }
+        .issue-body { margin-top: 1rem; }
+        .issue-actions { margin-top: 1rem; display: flex; gap: 1rem; }
+        .action-btn { border: none; padding: 0.5rem 1rem; border-radius: 6px; color: #fff; font-weight: bold; cursor: pointer; }
+        .btn-accept { background-color: #ffa000; } /* Orange */
+        .btn-complete { background-color: #43a047; } /* Green */
+    </style>
+</head>
+<body>
+    <main class="dashboard-main">
+        <section class="dashboard-hero">
+            <h1>{{block}} </h1>
+            <h1>Government of India  </h1>
+            <p>Welcome, Officer {{ username }}!</p>
+        </section>
+
+        <section class="user-issues-section">
+            <div class="section-header">
+                <h2><i class="fas fa-clipboard-list"></i> Issues Reported in Your Jurisdiction</h2>
+            </div>
+            
+            {% for issue in issues %}
+            <div class="issue-item">
+                <div class="issue-header">
+                    <div>
+                        <h3 class="issue-item-clickable"
+                            data-title="{{ issue[2] }}" 
+                            data-description="{{ issue[3] }}" 
+                            data-location="{{ issue[6] }}" 
+                            data-image="{{ url_for('static', filename='uploads/' + issue[7]) if issue[7] else '' }}">
+                            {{ issue[2] }}
+                        </h3>
+                        <small>Reported by: {{ issue[10] }} | Category: {{ issue[4] }}</small>
+                    </div>
+                    <span class="issue-status {{ issue[8]|lower|replace(' ', '-') }}">{{ issue[8] }}</span>
+                </div>
+                <div class="issue-body">
+                    <p>{{ issue[3][:100] }}...</p> </div>
+                {% if issue[8] != 'Completed' %}
+                <div class="issue-actions">
+                    <form action="{{ url_for('update_status', issue_id=issue[0]) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="status" value="In Progress">
+                        <button type="submit" class="action-btn btn-accept" {% if issue[8] == 'In Progress' %}disabled{% endif %}>Accept</button>
+                    </form>
+                    <form action="{{ url_for('update_status', issue_id=issue[0]) }}" method="post" style="display:inline;">
+                        <input type="hidden" name="status" value="Completed">
+                        <button type="submit" class="action-btn btn-complete">Complete</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+            {% else %}
+            <p>No issues to display in your area.</p>
+            {% endfor %}
+        </section>
+    </main>
+
+    <div id="issue-detail-modal" class="issue-detail-modal">
+        <div class="issue-modal-content">
+            <span id="modal-close-btn" class="issue-modal-close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <img id="modal-image" src="" alt="Issue Image" style="width: 100%; border-radius: 8px; margin-top: 15px;">
+            <p id="modal-description"></p>
+            <div id="modal-map"></div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>

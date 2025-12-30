@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Feed - All Reported Issues</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <style>
+        /* Reusing the same modal styles from profile.html */
+        .issue-detail-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+        }
+        .issue-modal-content {
+            background-color: #fefefe;
+            padding: 25px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .issue-modal-close {
+            color: #aaa;
+            position: absolute;
+            top: 10px; right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #modal-map {
+            height: 250px;
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .issue-list li {
+            cursor: pointer;
+        }
+        .reporter-info {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+        .reporter-info strong {
+            color: #007c91;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="dashboard-main">
+        <section class="dashboard-hero">
+            <h1><i class="fas fa-bullhorn"></i> Community Feed</h1>
+            <p>A live feed of all issues reported by citizens. Click on any issue to see the details.</p>
+        </section>
+
+        <section class="user-issues-section">
+            <div class="section-header">
+                <h2><i class="fas fa-list-alt"></i> All Reported Issues</h2>
+            </div>
+            <ul class="issues-list">
+                {% if issues %}
+                    {% for issue in issues %}
+                    <li class="issue-item-clickable"
+                        data-title="{{ issue.title }}" 
+                        data-description="{{ issue.description }}" 
+                        data-location="{{ issue.location }}" 
+                        data-image="{{ url_for('static', filename='uploads/' + issue.image_path) if issue.image_path else '' }}"
+                        data-block="{{ issue.block }}"
+                        data-district="{{ issue.district }}">
+                        <div>
+                            <span class="issue-title"><i class="fas fa-road"></i> {{ issue.title }}</span>
+                            <div class="reporter-info">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                Location: <strong>{{ issue.block }}, {{ issue.district }}</strong>
+                            </div>
+                        </div>
+                        <span class="issue-status {{ issue.status|lower|replace(' ', '-') }}">{{ issue.status }}</span>
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No issues have been reported yet. Be the first!</li>
+                {% endif %}
+            </ul>
+        </section>
+    </main>
+
+    <div id="issue-detail-modal" class="issue-detail-modal">
+        <div class="issue-modal-content">
+            <span id="modal-close-btn" class="issue-modal-close">&times;</span>
+            <h2 id="modal-title" style="color: #0097a7; margin-top: 0;">Issue Title</h2>
+            <p id="modal-location-info" style="font-weight: bold; color: #555;"></p>
+            <img id="modal-image" src="" alt="Issue Image" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 8px; margin-top: 15px; display: none;">
+            <p id="modal-description" style="margin-top: 15px; color: #333;"></p>
+            <div id="modal-map"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>

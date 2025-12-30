@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIXITY - Civic Risk Index Documentation</title>
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 1.5cm;
+            }
+            body {
+                font-size: 10pt;
+            }
+            h1 {
+                page-break-before: always;
+            }
+            h1:first-of-type {
+                page-break-before: avoid;
+            }
+            pre, table {
+                page-break-inside: avoid;
+            }
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: #1a1a1a;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #ffffff;
+        }
+        
+        h1 {
+            color: #1e3a8a;
+            font-size: 32pt;
+            font-weight: 700;
+            border-bottom: 4px solid #3b82f6;
+            padding-bottom: 12px;
+            margin: 40px 0 25px 0;
+        }
+        
+        h1:first-of-type {
+            margin-top: 0;
+            font-size: 38pt;
+            text-align: center;
+            border-bottom: none;
+        }
+        
+        h2 {
+            color: #1e40af;
+            font-size: 22pt;
+            font-weight: 600;
+            border-bottom: 2px solid #cbd5e1;
+            padding-bottom: 10px;
+            margin: 35px 0 20px 0;
+        }
+        
+        h3 {
+            color: #3b82f6;
+            font-size: 16pt;
+            font-weight: 600;
+            margin: 25px 0 15px 0;
+        }
+        
+        h4 {
+            color: #475569;
+            font-size: 13pt;
+            font-weight: 600;
+            margin: 20px 0 10px 0;
+        }
+        
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        
+        code {
+            background-color: #f1f5f9;
+            color: #dc2626;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 10pt;
+        }
+        
+        pre {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 9pt;
+            line-height: 1.5;
+            margin: 15px 0;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        pre code {
+            background-color: transparent;
+            color: #e2e8f0;
+            padding: 0;
+        }
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        th {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        
+        ul, ol {
+            margin: 12px 0 12px 25px;
+            padding-left: 0;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        blockquote {
+            border-left: 5px solid #3b82f6;
+            background-color: #eff6ff;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            border-bottom: 1px dotted #2563eb;
+        }
+        
+        a:hover {
+            color: #1e40af;
+            border-bottom: 1px solid #1e40af;
+        }
+        
+        strong {
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        hr {
+            border: none;
+            border-top: 2px solid #e2e8f0;
+            margin: 30px 0;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 30px 0 40px 0;
+            border-bottom: 3px solid #3b82f6;
+            margin-bottom: 40px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            color: #64748b;
+            font-size: 10pt;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FIXITY</h1>
+        <p style="font-size: 14pt; color: #64748b;">Civic Risk Index (CRI) System - Technical Documentation</p>
+    </div>
+    
+    <h1>FIXITY - Civic Risk Index (CRI) System</h1>
+<h2>Project Overview</h2>
+<p><strong>FIXITY</strong> is a comprehensive civic issue management and risk assessment platform that enables citizens to report infrastructure problems and helps authorities monitor and respond to civic risks in real-time. The system uses a proprietary <strong>Civic Risk Index (CRI)</strong> algorithm to quantify and prioritize civic issues based on severity, location, time escalation, and reporter credibility.</p>
+<h2>System Architecture</h2>
+<pre class="codehilite"><code>PROJECT - CRI/
+├── backend/          # Flask API Server
+├── frontend/         # React Web Application  
+└── fixity_mobile/    # Flutter Mobile App
+</code></pre>
+
+<h3>Components</h3>
+<p><strong>1. Backend (Flask + SQLAlchemy)</strong><br />
+- RESTful API server<br />
+- CRI calculation engine<br />
+- Real-time data aggregation<br />
+- Authentication &amp; authorization<br />
+- Database management</p>
+<p><strong>2. Frontend (React + TypeScript + Vite)</strong><br />
+- Authority Dashboard (real-time monitoring)<br />
+- Analytics Dashboard (data visualization)<br />
+- Community Feed<br />
+- Issue reporting interface<br />
+- Interactive map visualization</p>
+<p><strong>3. Mobile App (Flutter)</strong><br />
+- Citizen issue reporting<br />
+- CRI snapshot viewer<br />
+- Community feed<br />
+- Cross-platform (Android/iOS)</p>
+<h2>Core Features</h2>
+<h3>1. Civic Risk Index (CRI) Calculation</h3>
+<p><strong>Formula:</strong></p>
+<pre class="codehilite"><code>CRI = (Base Risk × Severity × Location) + Time Escalation × User Trust
+</code></pre>
+
+<p><strong>Components:</strong><br />
+- <strong>Base Risk</strong>: Category-specific baseline (1-10)<br />
+  - Public Safety: 9<br />
+  - Public Health: 8<br />
+  - Infrastructure: 6<br />
+  - Governance: 4</p>
+<ul>
+<li><strong>Severity Multiplier</strong>: Issue severity (1.0-2.5)</li>
+<li>Critical: 2.5</li>
+<li>High: 2.0</li>
+<li>Medium: 1.5</li>
+<li>
+<p>Low: 1.0</p>
+</li>
+<li>
+<p><strong>Location Multiplier</strong>: Context sensitivity (1.0-2.0)</p>
+</li>
+<li>School Zone: 2.0</li>
+<li>Hospital Zone: 1.8</li>
+<li>Market Area: 1.5</li>
+<li>Residential: 1.2</li>
+<li>
+<p>Rural: 1.0</p>
+</li>
+<li>
+<p><strong>Time Escalation</strong>: Logarithmic growth<br />
+<code>Escalation = log(hours_unresolved + 1) × 2</code></p>
+</li>
+<li>6 hours: +1.95 points</li>
+<li>24 hours: +3.22 points</li>
+<li>
+<p>72 hours: +4.29 points</p>
+</li>
+<li>
+<p><strong>User Trust Score</strong>: Reporter credibility (0.5-1.5)</p>
+</li>
+</ul>
+<h3>2. Auto-Escalation System</h3>
+<p>Issues automatically gain risk points over time:<br />
+- <strong>Hour-based</strong>: Optimized for demo visibility<br />
+- <strong>Logarithmic</strong>: Quick initial growth, then levels off<br />
+- <strong>Real-time</strong>: Recalculated on every API call<br />
+- <strong>Visible countdown</strong>: Shows next escalation timer</p>
+<h3>3. Authority Dashboard</h3>
+<p><strong>Real-Time Monitoring:</strong><br />
+- Live CRI score (auto-refresh every 5 seconds)<br />
+- Issue queue with priority sorting<br />
+- Time escalation indicators<br />
+- Escalation countdown timers<br />
+- Color-coded urgency levels</p>
+<p><strong>Visual Features:</strong><br />
+- 🟢 Green: &lt; 1 hour (fresh)<br />
+- 🟠 Orange: 1-24 hours (aging)<br />
+- 🔴 Red: 1+ days (critical)<br />
+- ⏰ Clock icon: Urgent issues (6+ hours)</p>
+<p><strong>Escalation Summary:</strong><br />
+- Shows count of escalating issues<br />
+- Displays soonest next escalation<br />
+- Example: "🕐 3 escalating +0.4pts in 23m"</p>
+<h3>4. Analytics Dashboard</h3>
+<p><strong>Data Visualization:</strong><br />
+- Real-time CRI tracking<br />
+- 7-day risk trend graph<br />
+- Risk composition pie chart<br />
+- Top risk locations<br />
+- Issue distribution by category<br />
+- Performance metrics</p>
+<p><strong>Jurisdiction Filtering:</strong><br />
+- Authorities see only their assigned block<br />
+- Real-time auto-refresh (5 seconds)<br />
+- Synchronized with Dashboard CRI</p>
+<h3>5. Mobile Application</h3>
+<p><strong>Citizen Features:</strong><br />
+- Report issues with photos<br />
+- Add location (GPS or manual)<br />
+- Real-time CRI snapshot<br />
+- Community feed<br />
+- Issue tracking</p>
+<p><strong>Real-Time Data:</strong><br />
+- Live issue counts<br />
+- CRI score for selected area<br />
+- Location-based filtering</p>
+<h2>Technology Stack</h2>
+<h3>Backend</h3>
+<ul>
+<li><strong>Framework</strong>: Flask 2.x</li>
+<li><strong>Database</strong>: SQLite (dev) / PostgreSQL (production)</li>
+<li><strong>ORM</strong>: SQLAlchemy</li>
+<li><strong>Authentication</strong>: Flask-Login</li>
+<li><strong>Password Hashing</strong>: Werkzeug</li>
+<li><strong>CORS</strong>: Flask-CORS</li>
+</ul>
+<h3>Frontend</h3>
+<ul>
+<li><strong>Framework</strong>: React 18</li>
+<li><strong>Language</strong>: TypeScript</li>
+<li><strong>Build Tool</strong>: Vite</li>
+<li><strong>Routing</strong>: React Router v6</li>
+<li><strong>HTTP Client</strong>: Axios</li>
+<li><strong>Charts</strong>: Chart.js + react-chartjs-2</li>
+<li><strong>Maps</strong>: React Leaflet</li>
+<li><strong>Icons</strong>: Lucide React</li>
+<li><strong>Styling</strong>: Tailwind CSS</li>
+</ul>
+<h3>Mobile</h3>
+<ul>
+<li><strong>Framework</strong>: Flutter 3.x</li>
+<li><strong>Language</strong>: Dart</li>
+<li><strong>HTTP</strong>: http package</li>
+<li><strong>State Management</strong>: StatefulWidget</li>
+</ul>
+<h2>Database Schema</h2>
+<h3>Users Table</h3>
+<pre class="codehilite"><code class="language-sql">CREATE TABLE user (
+    id INTEGER PRIMARY KEY,
+    username VARCHAR(80) UNIQUE NOT NULL,
+    email VARCHAR(120) UNIQUE NOT NULL,
+    password_hash VARCHAR(200) NOT NULL,
+    full_name VARCHAR(100),
+    role VARCHAR(20),          -- 'authority', 'citizen', 'admin'
+    block VARCHAR(100),         -- For authorities
+    district VARCHAR(100),
+    trust_score FLOAT DEFAULT 1.0,
+    created_at DATETIME
+);
+</code></pre>
+
+<h3>Issues Table</h3>
+<pre class="codehilite"><code class="language-sql">CREATE TABLE issue (
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    category VARCHAR(50),       -- 'Public Safety', 'Public Health', etc.
+    severity_level VARCHAR(20), -- 'Critical', 'High', 'Medium', 'Low'
+    severity_score FLOAT,       -- Calculated CRI score
+    latitude FLOAT,
+    longitude FLOAT,
+    block VARCHAR(100),
+    district VARCHAR(100),
+    location_context VARCHAR(50), -- 'School Zone', 'Hospital Zone', etc.
+    status VARCHAR(20),          -- 'Pending', 'In Progress', 'Resolved'
+    image_path VARCHAR(300),
+    user_id INTEGER,
+    created_at DATETIME,
+    resolved_at DATETIME,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+</code></pre>
+
+<h2>API Endpoints</h2>
+<h3>Authentication</h3>
+<ul>
+<li><code>POST /api/register</code> - Register new user</li>
+<li><code>POST /api/login</code> - User login</li>
+<li><code>POST /api/logout</code> - User logout</li>
+<li><code>GET /api/me</code> - Get current user</li>
+</ul>
+<h3>Issues</h3>
+<ul>
+<li><code>GET /api/authority_issues</code> - Get issues for authority's block</li>
+<li><code>GET /api/community_feed</code> - Get all issues (public feed)</li>
+<li><code>GET /api/my_issues</code> - Get current user's issues</li>
+<li><code>POST /api/mobile/report</code> - Submit new issue (mobile)</li>
+</ul>
+<h3>Analytics</h3>
+<ul>
+<li><code>GET /api/analytics</code> - Get analytics data (filtered by authority's block)</li>
+<li><code>GET /api/get_cri_data/&lt;district&gt;</code> - Get CRI data by district</li>
+</ul>
+<h3>Locations</h3>
+<ul>
+<li><code>GET /api/locations</code> - Get all unique locations</li>
+</ul>
+<h2>Setup Instructions</h2>
+<h3>Backend Setup</h3>
+<pre class="codehilite"><code class="language-bash">cd backend
+
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate  # Windows
+source venv/bin/activate  # Linux/Mac
+
+# Install dependencies
+pip install flask flask-sqlalchemy flask-login flask-cors
+
+# Initialize database
+python
+&gt;&gt;&gt; from app import app, db
+&gt;&gt;&gt; with app.app_context():
+&gt;&gt;&gt;     db.create_all()
+&gt;&gt;&gt; exit()
+
+# Run server
+python app.py
+# Server runs on http://0.0.0.0:5000
+</code></pre>
+
+<h3>Frontend Setup</h3>
+<pre class="codehilite"><code class="language-bash">cd frontend
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+# Server runs on http://localhost:5173
+
+# Build for production
+npm run build
+</code></pre>
+
+<h3>Mobile Setup</h3>
+<pre class="codehilite"><code class="language-bash">cd fixity_mobile
+
+# Get dependencies
+flutter pub get
+
+# Run on device/emulator
+flutter run
+
+# Build APK (Android)
+flutter build apk
+
+# Build iOS
+flutter build ios
+</code></pre>
+
+<h2>Configuration</h2>
+<h3>Backend Environment Variables</h3>
+<p>Create <code>.env</code> file in backend/:</p>
+<pre class="codehilite"><code class="language-env">SECRET_KEY=your-secret-key-here
+DATABASE_URL=sqlite:///app.db  # or PostgreSQL URL
+FLASK_ENV=development
+</code></pre>
+
+<h3>Mobile API Configuration</h3>
+<p>Update <code>lib/services/api_service.dart</code>:</p>
+<pre class="codehilite"><code class="language-dart">// For emulator
+static const String baseUrl = 'http://10.0.2.2:5000/api';
+
+// For real device (use your machine's IP)
+static const String baseUrl = 'http://192.168.x.x:5000/api';
+</code></pre>
+
+<h2>Key Features Walkthrough</h2>
+<h3>1. Time Escalation Display</h3>
+<p><strong>Location</strong>: Authority Dashboard → Issue Cards</p>
+<p><strong>What it shows:</strong><br />
+- Issue age: "8h ago", "1 day ago"<br />
+- Color-coded urgency<br />
+- Clock icon for urgent issues<br />
+- Next escalation countdown</p>
+<p><strong>Example:</strong></p>
+<pre class="codehilite"><code>ROAD HAZARD • 🕐 8h ago • 01:23 PM
+┌─────────────────────────────────────┐
+│ ⚠️ NEXT ESCALATION: +0.5 pts in 23m │
+└─────────────────────────────────────┘
+</code></pre>
+
+<h3>2. CRI Escalation Summary</h3>
+<p><strong>Location</strong>: Authority Dashboard → CRI Card (below progress bar)</p>
+<p><strong>What it shows:</strong><br />
+- Total count of escalating issues<br />
+- Soonest next escalation time<br />
+- Point increase prediction</p>
+<p><strong>Example:</strong></p>
+<pre class="codehilite"><code>CRI: 33/100
+[=========&gt;          ] STABLE CONDITION
+┌─────────────────────────────┐
+│ 🕐 3 escalating +0.4pts in 23m │
+└─────────────────────────────┘
+</code></pre>
+
+<h3>3. Real-Time Auto-Refresh</h3>
+<p><strong>Frequency</strong>: Every 5 seconds<br />
+<strong>Pages</strong>: Authority Dashboard, Analytics<br />
+<strong>Effect</strong>: Live updates without page reload</p>
+<h2>Production Deployment</h2>
+<h3>Backend (Flask)</h3>
+<ol>
+<li><strong>Use production server</strong>: Gunicorn or uWSGI</li>
+</ol>
+<pre class="codehilite"><code class="language-bash">pip install gunicorn
+gunicorn -w 4 -b 0.0.0.0:5000 app:app
+</code></pre>
+
+<ol>
+<li><strong>Database</strong>: Migrate to PostgreSQL</li>
+<li><strong>Security</strong>: </li>
+<li>Change SECRET_KEY</li>
+<li>Enable HTTPS</li>
+<li>Configure CORS properly</li>
+<li>Add rate limiting</li>
+</ol>
+<h3>Frontend (React)</h3>
+<ol>
+<li><strong>Build</strong>: <code>npm run build</code></li>
+<li><strong>Deploy</strong>: Vercel, Netlify, or any static hosting</li>
+<li><strong>Environment</strong>: Update API URLs</li>
+</ol>
+<h3>Mobile (Flutter)</h3>
+<ol>
+<li><strong>Update API URL</strong> in <code>api_service.dart</code></li>
+<li><strong>Build</strong>: </li>
+<li>Android: <code>flutter build apk --release</code></li>
+<li>iOS: <code>flutter build ios --release</code></li>
+<li><strong>Publish</strong>: Google Play Store / App Store</li>
+</ol>
+<h2>Security Considerations</h2>
+<ul>
+<li>⚠️ Change Flask SECRET_KEY in production</li>
+<li>⚠️ Use environment variables for sensitive data</li>
+<li>⚠️ Enable HTTPS for all endpoints</li>
+<li>⚠️ Implement rate limiting</li>
+<li>⚠️ Validate all user inputs</li>
+<li>⚠️ Use prepared statements (SQLAlchemy ORM)</li>
+<li>⚠️ Implement proper CORS policies</li>
+</ul>
+<h2>Performance Optimization</h2>
+<ol>
+<li><strong>Database Indexing</strong>:</li>
+</ol>
+<pre class="codehilite"><code class="language-sql">CREATE INDEX idx_issue_block ON issue(block);
+CREATE INDEX idx_issue_status ON issue(status);
+CREATE INDEX idx_issue_created ON issue(created_at);
+</code></pre>
+
+<ol>
+<li><strong>Caching</strong>: Implement Redis for frequently accessed data</li>
+<li><strong>CDN</strong>: Use CDN for static assets</li>
+<li><strong>Lazy Loading</strong>: Load images on demand</li>
+</ol>
+<h2>Demo Data</h2>
+<p>The system includes <strong>150+ realistic seeded issues</strong> across Odisha districts for demonstration purposes.</p>
+<p><strong>Test Accounts:</strong><br />
+- Username: admin / Password: admin (Authority role)<br />
+- Block: Bhubaneswar Ward 19<br />
+- District: Khordha</p>
+<h2>Known Issues &amp; Limitations</h2>
+<ol>
+<li><strong>Hour-based escalation</strong>: Designed for demo; production should use days</li>
+<li><strong>SQLite</strong>: Development only; production needs PostgreSQL</li>
+<li><strong>No background jobs</strong>: Escalation recalculates on-read</li>
+<li><strong>Single server</strong>: No load balancing implemented</li>
+</ol>
+<h2>Future Enhancements</h2>
+<ul>
+<li>[ ] Push notifications for urgent issues</li>
+<li>[ ] SMS/Email alerts for authorities</li>
+<li>[ ] Machine learning for risk prediction</li>
+<li>[ ] Image recognition for issue verification</li>
+<li>[ ] Multi-language support</li>
+<li>[ ] Advanced analytics dashboards</li>
+<li>[ ] Issue clustering and pattern detection</li>
+<li>[ ] Public API for third-party integrations</li>
+</ul>
+<h2>License</h2>
+<p>This project is developed for educational/demonstration purposes.</p>
+<h2>Contact &amp; Support</h2>
+<p>For issues, questions, or contributions, please refer to project documentation or contact the development team.</p>
+<hr />
+<p><strong>Version</strong>: 1.0.0<br />
+<strong>Last Updated</strong>: December 22, 2025<br />
+<strong>Status</strong>: Production Ready</p>
+    
+    <div class="footer">
+        <p><strong>FIXITY - Civic Risk Index System</strong></p>
+        <p>Version 1.0.0 | December 2025</p>
+    </div>
+</body>
+</html>

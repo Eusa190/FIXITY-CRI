@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Authority Dashboard | Fixity</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .dashboard-container {
+            padding-top: 2rem;
+        }
+
+        .issue-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .issue-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-custom container">
+        <a class="navbar-brand" href="/">Fixity Auth.</a>
+        <div class="d-flex align-items-center">
+            <span class="text-white me-3">Welcome, {{ authority.username }} ({{ authority.block }})</span>
+            <a href="/logout" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container dashboard-container">
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-danger text-white border-0 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">High Risk Issues</h5>
+                        <h2 class="display-4">{{ issues | selectattr('severity_score', 'gt', 50) | list | length }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark border-0 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Pending</h5>
+                        <h2 class="display-4">{{ issues | selectattr('status', 'equalto', 'Pending') | list | length }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white border-0 shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Resolved</h5>
+                        <h2 class="display-4">{{ issues | selectattr('status', 'equalto', 'Resolved') | list | length }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="mb-4">Incoming Reports & Risk Analysis</h3>
+
+        <div class="row">
+            {% for issue in issues %}
+            <div class="col-12">
+                <div class="card issue-card text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title d-flex align-items-center">
+                                <span
+                                    class="badge {{ 'bg-danger' if issue.severity_score > 50 else 'bg-warning' }} me-2">
+                                    Risk Score: {{ issue.severity_score }}
+                                </span>
+                                {{ issue.title }}
+                            </h5>
+                            <span class="badge {{ 'bg-success' if issue.status == 'Resolved' else 'bg-warning' }}">
+                                {{ issue.status }}
+                            </span>
+                        </div>
+                        <p class="card-text text-white-50">{{ issue.description }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <small class="text-white-50">
+                                <i class="fas fa-map-marker-alt me-1"></i> {{ issue.block }}, {{ issue.district }} |
+                                <i class="far fa-clock me-1"></i> {{ issue.created_at.strftime('%Y-%m-%d') }}
+                            </small>
+
+                            <div>
+                                {% if issue.image_path %}
+                                <a href="{{ url_for('static', filename='uploads/' + issue.image_path) }}"
+                                    target="_blank" class="btn btn-sm btn-outline-info me-2">View Image</a>
+                                {% endif %}
+
+                                {% if issue.status != 'Resolved' %}
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-warning"
+                                        onclick="updateStatus({{ issue.id }}, 'In Progress')">Mark In Progress</button>
+                                    <button class="btn btn-sm btn-outline-success"
+                                        onclick="updateStatus({{ issue.id }}, 'Resolved')">Mark Resolved</button>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center text-white-50 py-5">
+                <h4>No issues found for your block.</h4>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        async function updateStatus(id, newStatus) {
+            if (!confirm(`Change status to ${newStatus}?`)) return;
+
+            try {
+                const response = await fetch('/api/update_status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ issue_id: id, status: newStatus })
+                });
+                const res = await response.json();
+                if (res.success) {
+                    location.reload();
+                } else {
+                    alert('Error updating status');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+
+</html>

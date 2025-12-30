@@ -1,0 +1,429 @@
+@import "tailwindcss";
+
+/* ===========================================
+   FIXITY THEME SYSTEM
+   Public View: Light, documentary, readable
+   Monitoring View: Darker, focused, low distraction
+   =========================================== */
+
+:root {
+  /* ==========================================
+     FIXITY DESIGN SYSTEM — LOCKED
+     One canvas. Two surfaces. Three signals.
+     DO NOT MODIFY.
+     ========================================== */
+
+  /* ===================
+     1. CANVAS & SURFACE
+     =================== */
+  --canvas: #f5f6f7;
+  /* Global page background */
+  --surface: #ffffff;
+  /* Content blocks, cards, sections */
+
+  /* ===================
+     2. TEXT HIERARCHY
+     =================== */
+  --text-primary: #1c1f23;
+  /* Headlines, key facts */
+  --text-secondary: #4b5563;
+  /* Body paragraphs */
+  --text-muted: #9aa0a6;
+  /* Metadata, timestamps, disclaimers */
+
+  /* ===================
+     3. STRUCTURAL LINES
+     =================== */
+  --border-subtle: #e5e7eb;
+  /* Light dividers */
+  --border-strong: #d1d5db;
+  /* Section separators */
+
+  /* ===================
+     4. RISK SIGNALS ONLY
+     (Never as backgrounds)
+     =================== */
+  --risk-safe: #16a34a;
+  /* Green - resolved/normal */
+  --risk-elevated: #f59e0b;
+  /* Amber - elevated */
+  --risk-critical: #dc2626;
+  /* Red - critical */
+
+  /* ===================
+     5. BUTTONS
+     =================== */
+  --btn-primary-bg: #1c1f23;
+  --btn-primary-text: #ffffff;
+
+  /* ===================
+     6. TYPOGRAPHY SCALE
+     =================== */
+  --h1-size: 44px;
+  --h1-height: 1.15;
+  --h2-size: 28px;
+  --h2-height: 1.25;
+  --h3-size: 20px;
+  --h3-height: 1.3;
+  --body-size: 16px;
+  --body-height: 1.6;
+  --small-size: 13px;
+  --small-height: 1.4;
+
+  /* ===================
+     7. SPACING (Section padding)
+     =================== */
+  --section-padding: 64px;
+  --max-content-width: 1000px;
+
+  /* Legacy mappings */
+  --canvas-bg: var(--canvas);
+  --surface-bg: var(--surface);
+  --bg-main: var(--canvas);
+  --bg-card: var(--surface);
+  --bg-muted: #f0f1f3;
+  --text-main: var(--text-primary);
+  --risk-normal: var(--risk-safe);
+  --accent-critical: var(--risk-critical);
+  --accent-elevated: var(--risk-elevated);
+  --accent-stable: var(--risk-safe);
+  --accent-primary: var(--btn-primary-bg);
+  --border-color: var(--border-subtle);
+}
+
+[data-theme="monitoring"] {
+  /* Monitoring View - Darker, focused with HIGH CONTRAST */
+  --bg-main: #0F1115;
+  --bg-card: #181C24;
+  --bg-muted: #1E222A;
+  --text-main: #F9FAFB;
+  /* Bright white for main text */
+  --text-muted: #D1D5DB;
+  /* Light gray, still very readable */
+  --text-subtle: #9CA3AF;
+  /* Medium gray for timestamps etc */
+  --border-color: #2A2F3A;
+  --border-strong: #3F4451;
+}
+
+/* ===========================================
+   BASE STYLES
+   =========================================== */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.2s ease, color 0.2s ease;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ===========================================
+   THEME OVERRIDES FOR HARDCODED COLORS
+   These ensure the theme applies even when pages
+   use hardcoded Tailwind classes like bg-[#FAFBFC]
+   =========================================== */
+
+/* Override light backgrounds in monitoring mode */
+[data-theme="monitoring"] .bg-\[\#FAFBFC\],
+[data-theme="monitoring"] .bg-\[\#F4F5F7\],
+[data-theme="monitoring"] .bg-white {
+  background-color: var(--bg-main) !important;
+}
+
+/* Override card backgrounds */
+[data-theme="monitoring"] .bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+/* Override muted backgrounds */
+[data-theme="monitoring"] .bg-neutral-50,
+[data-theme="monitoring"] .bg-neutral-100 {
+  background-color: var(--bg-muted) !important;
+}
+
+/* Override text colors - MAIN TEXT (bright) */
+[data-theme="monitoring"] .text-\[\#0B0D12\],
+[data-theme="monitoring"] .text-neutral-700,
+[data-theme="monitoring"] .text-neutral-800,
+[data-theme="monitoring"] .text-neutral-900,
+[data-theme="monitoring"] .text-gray-700,
+[data-theme="monitoring"] .text-gray-800,
+[data-theme="monitoring"] .text-gray-900 {
+  color: var(--text-main) !important;
+}
+
+/* Override text colors - SECONDARY TEXT */
+[data-theme="monitoring"] .text-neutral-500,
+[data-theme="monitoring"] .text-neutral-600,
+[data-theme="monitoring"] .text-gray-500,
+[data-theme="monitoring"] .text-gray-600 {
+  color: var(--text-muted) !important;
+}
+
+/* Override text colors - SUBTLE TEXT */
+[data-theme="monitoring"] .text-neutral-400,
+[data-theme="monitoring"] .text-gray-400 {
+  color: var(--text-subtle) !important;
+}
+
+/* Override border colors */
+[data-theme="monitoring"] .border-neutral-200,
+[data-theme="monitoring"] .border-neutral-100 {
+  border-color: var(--border-color) !important;
+}
+
+/* Navbar special handling */
+[data-theme="monitoring"] nav.bg-white,
+[data-theme="monitoring"] nav.bg-white\/95 {
+  background-color: var(--bg-card) !important;
+}
+
+/* Cards and content blocks */
+[data-theme="monitoring"] .border.bg-white {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* ===========================================
+   THEME-AWARE COMPONENTS
+   =========================================== */
+
+/* Cards */
+.theme-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+}
+
+.theme-card-muted {
+  background-color: var(--bg-muted);
+  border: 1px solid var(--border-color);
+}
+
+/* Text */
+.theme-text {
+  color: var(--text-main);
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
+}
+
+.theme-text-subtle {
+  color: var(--text-subtle);
+}
+
+/* Borders */
+.theme-border {
+  border-color: var(--border-color);
+}
+
+.theme-border-strong {
+  border-color: var(--border-strong);
+}
+
+/* ===========================================
+   ACCENT COLORS (Same across themes)
+   =========================================== */
+
+.accent-critical {
+  color: var(--accent-critical);
+}
+
+.accent-elevated {
+  color: var(--accent-elevated);
+}
+
+.accent-stable {
+  color: var(--accent-stable);
+}
+
+.bg-accent-critical {
+  background-color: var(--accent-critical);
+}
+
+/* ===========================================
+   THEME TOGGLE STYLES
+   =========================================== */
+
+.theme-toggle {
+  font-size: 11px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: 'ui-monospace', monospace;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.theme-toggle:hover {
+  color: var(--text-main);
+  border-color: var(--border-strong);
+}
+
+/* ===========================================
+   UTILITY CLASSES
+   =========================================== */
+
+/* Story page scroll snap for cinematic feel */
+.story-scroll {
+  scroll-snap-type: y proximity;
+  overflow-y: scroll;
+}
+
+.story-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Subtle pulse animation */
+@keyframes fadeInOut {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Glass effect (monitoring view) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="monitoring"] .glass-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Monospace text */
+.mono {
+  font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', monospace;
+}
+
+/* ===========================================
+   STATUS BADGES (Theme-aware)
+   =========================================== */
+
+.badge-pending {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+
+.badge-progress {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+.badge-resolved {
+  background-color: var(--bg-muted);
+  color: var(--text-muted);
+}
+
+.badge-overdue {
+  background-color: #FEE2E2;
+  color: #B91C1C;
+}
+
+[data-theme="monitoring"] .badge-pending {
+  background-color: rgba(254, 243, 199, 0.15);
+  color: #FCD34D;
+}
+
+[data-theme="monitoring"] .badge-progress {
+  background-color: rgba(59, 130, 246, 0.15);
+  color: #60A5FA;
+}
+
+[data-theme="monitoring"] .badge-resolved {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-subtle);
+}
+
+[data-theme="monitoring"] .badge-overdue {
+  background-color: rgba(185, 28, 28, 0.2);
+  color: #FCA5A5;
+}
+
+/* ===========================================
+   FORM ELEMENTS (Theme-aware)
+   =========================================== */
+
+.theme-input {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.theme-input:focus {
+  border-color: var(--border-strong);
+  outline: none;
+}
+
+.theme-input::placeholder {
+  color: var(--text-subtle);
+}
+
+.theme-select {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+/* ===========================================
+   BUTTON STYLES
+   =========================================== */
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: white;
+  transition: opacity 0.15s ease;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+
+.btn-outline:hover {
+  background-color: var(--bg-muted);
+}
+
+/* ===========================================
+   LEAFLET MAP OVERRIDES (Theme-aware)
+   =========================================== */
+
+.leaflet-popup-content-wrapper {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.leaflet-popup-tip {
+  background-color: var(--bg-card) !important;
+}
+
+[data-theme="monitoring"] .leaflet-popup-content-wrapper {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}

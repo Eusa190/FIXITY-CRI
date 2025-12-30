@@ -1,0 +1,89 @@
+.success-stories {
+    background: transparent;
+    padding: 4rem 0;
+}
+
+.before-after-slider {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 151, 167, 0.2);
+    cursor: col-resize;
+}
+
+.before-after-slider .image-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+}
+
+.before-after-slider .before-image,
+.before-after-slider .after-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.before-after-slider .after-image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.before-after-slider .slider-handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-2px);
+    height: 100%;
+    width: 4px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.before-after-slider .handle-icon {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border-radius: 50%;
+    color: #0097a7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.before-after-slider .label-before,
+.before-after-slider .label-after {
+    position: absolute;
+    top: 20px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    pointer-events: none;
+}
+
+.before-after-slider .label-before {
+    left: 20px;
+}
+
+.before-after-slider .label-after {
+    right: 20px;
+}

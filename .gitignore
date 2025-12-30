@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+.pytest_cache/
+*.db
+instance/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+.npm/
+dist/
+build/
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.g.dart
+*.mocks.dart
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.diff
+*.orig
+
+# Database
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# Security - Password reset scripts
+**/reset_password.py
+
+# Firebase - Service Account Keys
+**/firebase-config.json
+firebase-adminsdk-*.json
+
+# OS
+Thumbs.db
+.DS_Store
