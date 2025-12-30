@@ -17,6 +17,14 @@ import cri_engine
 from flask import send_from_directory
 import json
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    print("WARNING: python-dotenv not installed. Install with: pip install python-dotenv")
+    print("Environment variables will need to be set manually.")
+
 # Initialize App
 app = Flask(__name__)
 # Explicitly tell Flask where static files are if needed, but the route below handles uploads specifically.
@@ -41,12 +49,17 @@ def serve_uploads(filename):
     upload_folder = app.config.get('UPLOAD_FOLDER', 'static/uploads')
     return send_from_directory(os.path.join(app.root_path, upload_folder), filename)
 
-# Mail Config (Replace with real credentials later)
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'indrajitm133@gmail.com'
-app.config['MAIL_PASSWORD'] = 'dhjrlpihailfslte'
+# Mail Config - Load from environment variables
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'True').lower() == 'true'
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+
+# Validate required email configuration
+if not app.config['MAIL_USERNAME'] or not app.config['MAIL_PASSWORD']:
+    print("WARNING: Email credentials not configured. Email functionality will not work.")
+    print("Please set MAIL_USERNAME and MAIL_PASSWORD environment variables.")
 
 db.init_app(app)
 mail = Mail(app)
@@ -181,7 +194,7 @@ def send_otp_api():
     
     # --- SEND EMAIL LOGIC STARTS HERE ---
     try:
-        msg = Message('Your Fixity OTP', sender='indrajitm133@gmail.com', recipients=[email])
+        msg = Message('Your Fixity OTP', sender=app.config['MAIL_USERNAME'], recipients=[email])
         msg.body = f'Your verification code is: {otp}'
         mail.send(msg)
         print(f"Email sent to {email}")

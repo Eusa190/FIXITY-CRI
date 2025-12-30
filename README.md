@@ -232,7 +232,17 @@ venv\Scripts\activate  # Windows
 source venv/bin/activate  # Linux/Mac
 
 # Install dependencies
-pip install flask flask-sqlalchemy flask-login flask-cors
+pip install flask flask-sqlalchemy flask-login flask-cors flask-mail python-dotenv
+
+# Configure environment variables (REQUIRED)
+# Copy the example file and edit with your credentials
+cp .env.example .env
+# Edit .env and set:
+#   - SECRET_KEY (generate with: python -c "import secrets; print(secrets.token_hex(32))")
+#   - MAIL_USERNAME (your Gmail address)
+#   - MAIL_PASSWORD (Gmail App Password - see backend/ENV_SETUP.md)
+
+# For detailed setup instructions, see: backend/ENV_SETUP.md
 
 # Initialize database
 python
@@ -243,8 +253,10 @@ python
 
 # Run server
 python app.py
-# Server runs on http://0.0.0.0:5000
+# Server runs on http://0.0.0.0:8000
 ```
+
+**⚠️ Security Note:** Never commit your `.env` file! It contains sensitive credentials. See `SECURITY_AUDIT.md` for security best practices.
 
 ### Frontend Setup
 ```bash
@@ -281,12 +293,31 @@ flutter build ios
 ## Configuration
 
 ### Backend Environment Variables
-Create `.env` file in backend/:
+
+**IMPORTANT:** The backend requires proper environment variable configuration.
+
+Create `.env` file in `backend/` directory (use `.env.example` as template):
+
 ```env
-SECRET_KEY=your-secret-key-here
-DATABASE_URL=sqlite:///app.db  # or PostgreSQL URL
+# Required: Flask secret key for session encryption
+SECRET_KEY=generate-using-python-secrets-module
+
+# Required: Email credentials for OTP verification
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-gmail-app-password
+
+# Optional: Database configuration
+DATABASE_URL=sqlite:///fixity.db  # or PostgreSQL URL
+
+# Optional: Flask environment
 FLASK_ENV=development
 ```
+
+**For detailed setup instructions with security best practices, see:**
+- `backend/ENV_SETUP.md` - Complete environment setup guide
+- `SECURITY_AUDIT.md` - Security audit and recommendations
+
+**⚠️ NEVER commit `.env` files to version control!**
 
 ### Mobile API Configuration
 Update `lib/services/api_service.dart`:
@@ -352,11 +383,14 @@ gunicorn -w 4 -b 0.0.0.0:5000 app:app
 ```
 
 2. **Database**: Migrate to PostgreSQL
-3. **Security**: 
-   - Change SECRET_KEY
+3. **Security (CRITICAL)**: 
+   - Set strong SECRET_KEY environment variable
+   - Configure email credentials via environment variables (see `backend/ENV_SETUP.md`)
    - Enable HTTPS
    - Configure CORS properly
    - Add rate limiting
+   - Review `SECURITY_AUDIT.md` for complete security checklist
+   - Never use default or hardcoded credentials
 
 ### Frontend (React)
 1. **Build**: `npm run build`
@@ -423,6 +457,22 @@ The system includes **150+ realistic seeded issues** across Odisha districts for
 ## License
 
 This project is developed for educational/demonstration purposes.
+
+## Security
+
+**⚠️ Important Security Information:**
+
+This repository has been audited for security issues. Please review:
+
+- **`SECURITY_AUDIT.md`** - Complete security audit report with findings and recommendations
+- **`backend/ENV_SETUP.md`** - Environment variable setup guide with security best practices
+
+**Key Security Points:**
+- Never commit `.env` files or credentials to version control
+- Always use environment variables for sensitive configuration
+- Use strong, randomly generated SECRET_KEY values
+- Use Gmail App Passwords, not regular passwords
+- Review the security audit before deploying to production
 
 ## Contact & Support
 
