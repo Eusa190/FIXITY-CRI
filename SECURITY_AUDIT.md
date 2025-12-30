@@ -27,7 +27,7 @@ This security audit identified **CRITICAL** security vulnerabilities in the FIXI
 **Issue:**
 Gmail credentials are hardcoded directly in the source code:
 - Email: `indrajitm133@gmail.com`
-- Password: `dhjrlpihailfslte` (appears to be an App Password)
+- Password: `***REDACTED***` (App Password - 16 characters)
 
 **Impact:**
 - ✗ Credentials are publicly accessible in the repository
@@ -123,7 +123,8 @@ These files use placeholder values and do not contain real credentials.
 ### Step 1: Immediate Actions (CRITICAL)
 1. **Revoke the exposed Gmail App Password:**
    - Go to https://myaccount.google.com/apppasswords
-   - Find and revoke the password `dhjrlpihailfslte`
+   - Find and revoke the password that was exposed (App Password for the email account)
+   - The password should be revoked immediately
 
 2. **Remove hardcoded credentials from code:**
    - Update `app.py` to use environment variables

@@ -38,7 +38,7 @@ A comprehensive security audit was performed on the FIXITY-CRI repository. Resul
 **Before:**
 ```python
 MAIL_USERNAME = 'indrajitm133@gmail.com'
-MAIL_PASSWORD = 'dhjrlpihailfslte'
+MAIL_PASSWORD = '***REDACTED***'  # 16-character App Password
 ```
 
 **After:**
@@ -214,8 +214,8 @@ All changes have been validated:
 
 1. **Revoke Exposed Gmail App Password:**
    - Go to https://myaccount.google.com/apppasswords
-   - Find and delete the password that was exposed
-   - The password `dhjrlpihailfslte` should be revoked immediately
+   - Find and delete the App Password that was exposed in the repository
+   - The exposed password should be revoked immediately
 
 2. **Generate New Credentials:**
    - Create a new Gmail App Password
