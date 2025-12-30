@@ -3,7 +3,9 @@ flask-sqlalchemy
 flask-mysqldb
 flask-migrate
 flask-mail
+flask-login
+flask-cors
+python-dotenv
 pandas
 numpy
 werkzeug
-flask-cors

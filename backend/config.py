@@ -1,7 +1,23 @@
 import os
+import sys
 
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-key-change-in-production')
+    # SECRET_KEY configuration with security enforcement
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    if not SECRET_KEY:
+        # In development, provide a warning but use a development key
+        # In production, this should fail
+        if os.environ.get('FLASK_ENV') == 'production':
+            raise ValueError(
+                "SECRET_KEY environment variable must be set in production. "
+                "Generate a secure random key and set it in your .env file."
+            )
+        else:
+            print("\n" + "="*70, file=sys.stderr)
+            print("WARNING: Using insecure development SECRET_KEY!", file=sys.stderr)
+            print("Set SECRET_KEY environment variable for production use.", file=sys.stderr)
+            print("="*70 + "\n", file=sys.stderr)
+            SECRET_KEY = 'dev-insecure-key-change-in-production'
     
     # SQLite Database Configuration (easier for local development)
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
